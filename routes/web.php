@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'GmodController@index');
+Route::get('jukebox/play', 'VideoController@play');
+Route::get('jukebox/video_title', 'VideoController@title');

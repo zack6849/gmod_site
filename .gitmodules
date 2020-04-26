@@ -1,0 +1,3 @@
+[submodule "yapi"]
+	path = yapi
+	url = git@github.com:zack6849/yapi.git

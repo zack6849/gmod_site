@@ -12,8 +12,10 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
+        "koraktor/steam-condenser": "dev-master",
         "laravel/framework": "^7.0",
-        "laravel/tinker": "^2.0"
+        "laravel/tinker": "^2.0",
+        "monolog/monolog": "2.0.2"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
@@ -59,5 +61,11 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ]
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:zack6849/steam-condenser-php.git"
+        }
+    ]
 }

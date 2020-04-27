@@ -2,24 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\GetOnlineUsers;
+use App\Jobs\GetStaffData;
 use Illuminate\Console\Command;
 
-class RefreshOnlineUsers extends Command
+class RefreshStaffData extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'gmod:refresh_stats';
+    protected $signature = 'gmod:refresh_staff_data';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Refresh online player stats';
+    protected $description = 'Refresh staff info and ranks from ulx.txt';
 
     /**
      * Create a new command instance.
@@ -38,6 +38,6 @@ class RefreshOnlineUsers extends Command
      */
     public function handle()
     {
-        return GetOnlineUsers::dispatchNow();
+        return GetStaffData::dispatchNow();
     }
 }

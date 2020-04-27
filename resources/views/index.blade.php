@@ -206,13 +206,49 @@
                 </div>
             </div>
             <div class="col col-3">
-                <div class="list-group">
-                    <a class="list-group-item active"><b>Stats</b></a>
-                    <a class="list-group-item stat">
-                        <span class='label'>
-                            <i class="fa fa-gamepad"></i>{{count($users)}} Players Online
-                        </span>
+                <div class="list-group mt-2">
+                    <a class="list-group-item active">
+                        <b class="hover:text-white text-white text-md">Stats</b>
                     </a>
+                    <a class="list-group-item">
+                        <i class="fa fa-gamepad pr-1"></i>{{$online_player_count}} Players Online
+                    </a>
+                    <a class="list-group-item">
+                        <i class="fa fa-user-shield pr-1"></i>{{$online_staff_count}} Staff Online
+                    </a>
+                </div>
+                    @foreach($ranks as $rank)
+                        <div class="list-group rank my-3">
+                            <a class="list-group-item p-2 active">
+                                <b class="hover:text-white text-white text-md">{{$rank->friendly_name}}</b>
+                            </a>
+                            @foreach($rank->users as $user)
+                                @if($user->is_connected)
+                                <a class="list-group-item user" id="{{$user->steamid}}">
+                                        <div class="flex align-items-center">
+                                            <img class="img rounded-circle border-success border-4 mr-2" src="{{$user->avatar_url}}">
+                                            <p>{{$user->name}}</p>
+                                        </div>
+                                </a>
+                                @elseif($user->is_online)
+                                    <a class="list-group-item user" id="{{$user->steamid}}">
+                                        <div class="flex align-items-center">
+                                            <img class="img rounded-circle border-primary border-4 mr-2" src="{{$user->avatar_url}}">
+                                            <p>{{$user->name}}</p>
+                                        </div>
+                                    </a>
+                                @else
+
+                                    <a class="list-group-item user" id="{{$user->steamid}}">
+                                        <div class="flex align-items-center">
+                                            <img class="img rounded-circle border-dark border-4 mr-2" src="{{$user->avatar_url}}">
+                                            <p>{{$user->name}}</p>
+                                        </div>
+                                    </a>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endforeach
 {{--                    <a class="list-group-item stat"><span class='label'><i class="fa fa-steamUser-secret"></i>${StaffOnline} Staff Online</span></a>--}}
 {{--                    <a class="list-group-item stat"><span class="label">Ranks Refreshed @ ${LastStaffRefresh}</span></a>--}}
                 </div>

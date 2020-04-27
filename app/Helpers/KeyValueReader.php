@@ -3,9 +3,6 @@
 
 namespace App\Helpers;
 
-
-use Illuminate\Support\Arr;
-
 class KeyValueReader
 {
     private $content;
@@ -20,8 +17,8 @@ class KeyValueReader
 
     public function parse()
     {
-
         $json = $this->content;
+
         //encapsulate in braces
         $json = "{\n$json\n}";
 
@@ -45,16 +42,10 @@ class KeyValueReader
         $replace = '${1},${2}${3}${4}';
         $json = preg_replace($pattern, $replace, $json);
 
-        $pattern = "/^\s+(".+")$\n\s+}/";
-        $replace = '{$1},';
-        $json = preg_replace($pattern, $replace, $json);
-
         //object as value
         $pattern = '/}(\s*"[^"]*":)/';
         $replace = '},${1}';
         $json = preg_replace($pattern, $replace, $json);
-
-
-        return $json;
+        return json_decode($json, true);
     }
 }

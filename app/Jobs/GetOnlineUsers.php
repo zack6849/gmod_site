@@ -2,14 +2,17 @@
 
 namespace App\Jobs;
 
+use App\SteamUser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
+use SteamCondenser\Exceptions\SteamCondenserException;
 use SteamCondenser\Servers\Sockets\SteamSocket;
 use SteamCondenser\Servers\SourceServer;
+use SteamCondenser\Servers\SteamPlayer;
 
 class GetOnlineUsers implements ShouldQueue
 {
@@ -21,7 +24,7 @@ class GetOnlineUsers implements ShouldQueue
      * Create a new job instance.
      *
      * @return void
-     * @throws \SteamCondenserException
+     * @throws SteamCondenserException
      */
     public function __construct()
     {
@@ -39,6 +42,20 @@ class GetOnlineUsers implements ShouldQueue
     {
         $players = $this->server->getPlayers(env('SRCDS_RCON_PASS'));
         Cache::put('online_players', $players, now()->addMinutes(5));
+        Cache::put('online_player_count', count($players), now()->addMinutes(5));
         Cache::put('online_players_timestamp', now());
+        $online_staff = 0;
+        /** @var SteamPlayer $player */
+        foreach ($players as $player){
+            if(strlen(trim($player->getSteamId()))== 0){
+                continue;
+            }
+            $steam_user = SteamUser::findOrCreate($player->getSteamId());
+            $steam_user->updateStatistics($steam_user->getProfile());
+            if($steam_user->isStaff()){
+                $online_staff++;
+            }
+        }
+        Cache::put('online_staff_count', $online_staff);
     }
 }

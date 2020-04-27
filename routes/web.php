@@ -1,6 +1,8 @@
 <?php
 
+use App\Helpers\KeyValueReader;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'GmodController@index');
 Route::get('jukebox/play', 'VideoController@play');
 Route::get('jukebox/video_title', 'VideoController@title');
+Route::get('/test', function(){
+    $content = Storage::get('users.txt');
+    $parser = new KeyValueReader($content);
+    return [$parser->parse()];
+});

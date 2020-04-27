@@ -42,6 +42,9 @@ class GetStaffData implements ShouldQueue
             }
             $group = $user_data['group'];
             $steam_user = SteamUser::findOrCreate($steam_id);
+            if($steam_user == null){
+                continue;
+            }
             $rank = Rank::findOrCreate($group);
             $steam_user->rank_id = $rank->id;
             $steam_user->save();

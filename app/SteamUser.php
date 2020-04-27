@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use SteamCondenser\Community\SteamId;
+use SteamCondenser\Exceptions\SteamCondenserException;
 use SteamCondenser\Servers\SteamPlayer;
 
 /**
@@ -58,7 +59,11 @@ class SteamUser extends Model
         //if we failed to find a user, create him.
         if($steam_user == null){
             SteamId::clearCache();
-            $profile = SteamId::getFromSteamId($steam_id);
+            try{
+                $profile = SteamId::getFromSteamId($steam_id);
+            }catch (SteamCondenserException $exception){
+                return null;
+            }
             $attributes = [
                 'steamid' => $steam_id,
                 'avatar_url' => $profile->getIconAvatarUrl(),

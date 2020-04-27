@@ -51,6 +51,9 @@ class GetOnlineUsers implements ShouldQueue
                 continue;
             }
             $steam_user = SteamUser::findOrCreate($player->getSteamId());
+            if($steam_user == null){
+                continue;
+            }
             $steam_user->updateStatistics($steam_user->getProfile());
             if($steam_user->isStaff()){
                 $online_staff++;

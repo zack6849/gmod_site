@@ -29,10 +29,10 @@
     rm -rf {{ $deployment }}/storage
     ln -nfs {{ $env }} {{ $deployment }}/.env
     ln -nfs {{ $storage }} {{ $deployment }}/storage
-    yarn install
+    npm install
     composer install --prefer-dist
-    yarn run production
-    php artisan migrate --force --database=migrate
+    npm run production
+    php artisan migrate --force
 @endtask
 
 @task('live', ['on' => 'production'])

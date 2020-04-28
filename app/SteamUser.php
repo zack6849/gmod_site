@@ -64,8 +64,12 @@ class SteamUser extends Model
             }catch (SteamCondenserException $exception){
                 return null;
             }
+            $community_id = SteamId::convertSteamIdToCommunityId($steam_id);
+            $steam_id3 = SteamId::convertCommunityIdToSteamId3($community_id);
             $attributes = [
                 'steamid' => $steam_id,
+                'steamid3' => $steam_id3,
+                'steamid64' => $community_id,
                 'avatar_url' => $profile->getIconAvatarUrl(),
                 'name' => $profile->getNickname(),
             ];
@@ -114,7 +118,7 @@ class SteamUser extends Model
         return $this->getConnectedPlayer() !== null;
     }
 
-    public function getProfile($cached = true)
+    public function getProfile()
     {
         SteamId::clearCache();
         return SteamId::getFromSteamId($this->steamid);

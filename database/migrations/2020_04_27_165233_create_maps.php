@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRank extends Migration
+class CreateMaps extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateRank extends Migration
      */
     public function up()
     {
-        Schema::create('ranks', function (Blueprint $table) {
+        Schema::create('maps', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
+            $table->string("name")->unique();
             $table->string("friendly_name");
-            $table->boolean("is_staff")->default(0);
-            $table->integer("sort_order")->default(0);
+            $table->string("image_url")->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateRank extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rank');
+        Schema::dropIfExists('map');
     }
 }

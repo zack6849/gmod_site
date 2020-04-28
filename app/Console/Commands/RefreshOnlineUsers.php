@@ -12,7 +12,7 @@ class RefreshOnlineUsers extends Command
      *
      * @var string
      */
-    protected $signature = 'gmod:refresh_stats';
+    protected $signature = 'gmod:refresh_players';
 
     /**
      * The console command description.

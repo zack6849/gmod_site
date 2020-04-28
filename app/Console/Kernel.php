@@ -4,6 +4,8 @@ namespace App\Console;
 
 use App\Jobs\GetOnlineUsers;
 use App\Jobs\GetStaffData;
+use App\Jobs\UpdateUsers;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -29,6 +31,8 @@ class Kernel extends ConsoleKernel
          $schedule->job(GetOnlineUsers::class)->everyFiveMinutes();
          //much less often changed, we don't care about rank changes that much.
          $schedule->job(GetStaffData::class)->everyThirtyMinutes();
+         //update all records daily at 2am
+         $schedule->job(UpdateUsers::class)->dailyAt('2:00');
     }
 
     /**

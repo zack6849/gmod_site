@@ -2,24 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\GetStaffData;
+use App\Jobs\UpdateUsers;
 use Illuminate\Console\Command;
 
-class RefreshStaffData extends Command
+class RefreshUsers extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'gmod:refresh_staff';
+    protected $signature = 'gmod:refresh_all_users';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Refresh staff info and ranks from ulx.txt';
+    protected $description = 'Refresh all steam user statistics';
 
     /**
      * Create a new command instance.
@@ -38,6 +38,6 @@ class RefreshStaffData extends Command
      */
     public function handle()
     {
-        return GetStaffData::dispatchNow();
+        return UpdateUsers::dispatchNow();
     }
 }

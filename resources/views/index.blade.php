@@ -1,35 +1,11 @@
 <x-layout title="Prop Hunt [US]">
-    <style scoped="scoped">
-        /*.fa {*/
-        /*    margin-right: 0.7em;*/
-        /*}*/
-
-        /*.stat * {*/
-        /*    color: #333 !important;*/
-        /*}*/
-
-        /*.container {*/
-        /*    width: 970px !important;*/
-        /*}*/
-
+    <style>
         body {
             background: fixed center url("/img/city.jpg");
         }
-
         ol.numbered {
             list-style-type: decimal;
         }
-
-        /*a.list-group-item {*/
-        /*    border: none !important;*/
-        /*    border-image-width: 0 !important;*/
-        /*    margin-bottom: 0;*/
-        /*}*/
-
-        /*a.list-group-item:not(.active):not(.stat) {*/
-        /*    border: none !important;*/
-        /*    background-color: rgba(166, 166, 166, 0.5) !important;*/
-        /*}*/
     </style>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-light rounded my-2">
@@ -40,8 +16,7 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-                    <a class="nav-item nav-link">Forums</a>
-                    <a class="nav-item nav-link">Contact Us</a>
+                    <a class="nav-item nav-link" href="mailto:prophunt@zcraig.me">Contact Us</a>
                 </div>
             </div>
         </nav>
@@ -223,29 +198,18 @@
                                 <b class="hover:text-white text-white text-md">{{$rank->friendly_name}}</b>
                             </a>
                             @foreach($rank->users as $user)
-                                @if($user->is_connected)
-                                <a class="list-group-item user" id="{{$user->steamid}}">
-                                        <div class="flex align-items-center">
+                                <a class="list-group-item user" id="{{$user->steamid}}" href="https://steamcommunity.com/profiles/{{$user->steamid64}}">
+                                    <div class="flex align-items-center">
+                                        @if($user->is_connected)
                                             <img class="img rounded-circle border-success border-4 mr-2" src="{{$user->avatar_url}}">
-                                            <p>{{$user->name}}</p>
-                                        </div>
-                                </a>
-                                @elseif($user->is_online)
-                                    <a class="list-group-item user" id="{{$user->steamid}}">
-                                        <div class="flex align-items-center">
+                                        @elseif($user->is_online)
                                             <img class="img rounded-circle border-primary border-4 mr-2" src="{{$user->avatar_url}}">
-                                            <p>{{$user->name}}</p>
-                                        </div>
-                                    </a>
-                                @else
-
-                                    <a class="list-group-item user" id="{{$user->steamid}}">
-                                        <div class="flex align-items-center">
-                                            <img class="img rounded-circle border-dark border-4 mr-2" src="{{$user->avatar_url}}">
-                                            <p>{{$user->name}}</p>
-                                        </div>
-                                    </a>
-                                @endif
+                                        @else
+                                            <img class="img rounded-circle border-secondary border-4 mr-2" src="{{$user->avatar_url}}">
+                                        @endif
+                                        <p>{{$user->name}}</p>
+                                    </div>
+                                </a>
                             @endforeach
                         </div>
                     @endforeach

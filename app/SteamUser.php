@@ -81,11 +81,16 @@ class SteamUser extends Model
     }
 
     public function updateStatistics(SteamId $profile){
+        $steam_id = $this->steamid;
+        $community_id = SteamId::convertSteamIdToCommunityId($steam_id);
+        $steam_id3 = SteamId::convertCommunityIdToSteamId3($community_id);
         $attributes = [
             'name' => $profile->getNickname(),
             'avatar_url' => $profile->getIconAvatarUrl(),
             'is_online' => false,
             'is_connected' => false,
+            'steamid3' => $steam_id3,
+            'steamid64' => $community_id,
         ];
         if($profile->isOnline()){
             $attributes['last_online_at'] = now();

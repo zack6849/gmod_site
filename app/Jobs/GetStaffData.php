@@ -49,12 +49,5 @@ class GetStaffData implements ShouldQueue
             $steam_user->rank_id = $rank->id;
             $steam_user->save();
         }
-        /** @var Rank $rank */
-        foreach (Rank::whereIsStaff(true)->get()->all() as $rank){
-            /** @var SteamUser $user */
-            foreach ($rank->users as $user){
-                $user->updateStatistics($user->getProfile());
-            }
-        }
     }
 }

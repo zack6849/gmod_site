@@ -3,12 +3,14 @@
 namespace App\Jobs;
 
 use App\SteamUser;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
+use PhpParser\Builder;
 use SteamCondenser\Exceptions\SteamCondenserException;
 use SteamCondenser\Servers\Sockets\SteamSocket;
 use SteamCondenser\Servers\SourceServer;
@@ -44,6 +46,16 @@ class GetOnlineUsers implements ShouldQueue
         Cache::put('online_players', $players, now()->addMinutes(5));
         Cache::put('online_player_count', count($players), now()->addMinutes(5));
         Cache::put('online_players_timestamp', now());
+
+        $staff_players = SteamUser::whereHas('rank', function(Builder $builder){
+            return $builder->where('is_staff', '=', true);
+        })->get()->all();
+
+        /** @var SteamUser $player */
+        foreach ($staff_players as $player){
+            $player->updateStatistics($player->getProfile());
+        }
+
         $online_staff = 0;
         /** @var SteamPlayer $player */
         foreach ($players as $player){
@@ -54,8 +66,10 @@ class GetOnlineUsers implements ShouldQueue
             if($steam_user == null){
                 continue;
             }
-            $steam_user->updateStatistics($steam_user->getProfile());
-            if($steam_user->isStaff()){
+            if(!$steam_user->isStaff()){
+                //we already fetched this a second ago if they're staff.
+                $steam_user->updateStatistics($steam_user->getProfile());
+            }else{
                 $online_staff++;
             }
         }

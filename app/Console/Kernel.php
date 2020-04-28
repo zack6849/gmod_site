@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\GetOnlineUsers;
+use App\Jobs\GetStaffData;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,6 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
          $schedule->job(GetOnlineUsers::class)->everyFiveMinutes();
+         //much less often changed, we don't care about rank changes that much.
+         $schedule->job(GetStaffData::class)->everyThirtyMinutes();
     }
 
     /**

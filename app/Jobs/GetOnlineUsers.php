@@ -42,8 +42,9 @@ class GetOnlineUsers implements ShouldQueue
     public function handle()
     {
         $players = $this->server->getPlayers(env('SRCDS_RCON_PASS'));
-        Cache::put('online_players', $players, now()->addMinutes(5));
-        Cache::put('online_player_count', count($players), now()->addMinutes(5));
+        //cache ttl should be slightly longer than the cronjob, so in theory we won't have to trigger the job on http request.
+        Cache::put('online_players', $players, now()->addMinutes(6));
+        Cache::put('online_player_count', count($players), now()->addMinutes(6));
         Cache::put('online_players_timestamp', now());
 
         $staff_players = SteamUser::whereHas('rank', function(Builder $builder){

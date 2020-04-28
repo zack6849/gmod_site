@@ -14,8 +14,8 @@ class AddNewIdsToSteamUsers extends Migration
     public function up()
     {
         Schema::table('steam_users', function (Blueprint $table) {
-            $table->string("steamid3")->unique()->after('steamid');
-            $table->string("steamid64")->unique()->after('steamid3');
+            $table->string("steamid3")->unique()->after('steamid')->nullable();
+            $table->string("steamid64")->unique()->after('steamid3')->nullable();
         });
     }
 

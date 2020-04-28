@@ -3,14 +3,13 @@
 namespace App\Jobs;
 
 use App\SteamUser;
-use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
-use PhpParser\Builder;
 use SteamCondenser\Exceptions\SteamCondenserException;
 use SteamCondenser\Servers\Sockets\SteamSocket;
 use SteamCondenser\Servers\SourceServer;

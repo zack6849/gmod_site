@@ -5,7 +5,6 @@ namespace App\Console;
 use App\Jobs\GetOnlineUsers;
 use App\Jobs\GetStaffData;
 use App\Jobs\UpdateUsers;
-use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

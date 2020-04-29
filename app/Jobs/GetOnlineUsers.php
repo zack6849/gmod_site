@@ -10,28 +10,24 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
-use SteamCondenser\Exceptions\SteamCondenserException;
+use Sentry\Breadcrumb;
 use SteamCondenser\Servers\Sockets\SteamSocket;
 use SteamCondenser\Servers\SourceServer;
 use SteamCondenser\Servers\SteamPlayer;
+use function Sentry\addBreadcrumb;
 
 class GetOnlineUsers implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $server;
-
     /**
      * Create a new job instance.
      *
      * @return void
-     * @throws SteamCondenserException
      */
     public function __construct()
     {
-        $this->server = new SourceServer(env('SRCDS_HOST', 'localhost'), env('SRCDS_PORT', 27015));
-        $this->server->initialize();
-        SteamSocket::setTimeout(50000);
+        //
     }
 
     /**
@@ -41,12 +37,23 @@ class GetOnlineUsers implements ShouldQueue
      */
     public function handle()
     {
-        try{
-            $players = $this->server->getPlayers(env('SRCDS_RCON_PASS'));
-        }catch (\Exception $exception){
-            //bail out if we fail to catch players
+        try {
+            SteamSocket::setTimeout(50000);
+            $server = new SourceServer(env('SRCDS_HOST', 'localhost'), env('SRCDS_PORT', 27015));
+            $server->initialize();
+            $players = $server->getPlayers(env('SRCDS_RCON_PASS'));
+        } catch (\Exception $exception) {
+            addBreadcrumb(new Breadcrumb(
+                Breadcrumb::LEVEL_ERROR,
+                Breadcrumb::TYPE_ERROR,
+                'error_reporting',
+                'Failed to get online users.',
+                ['exception' => $exception]
+            ));
+            //bail out if we fail to get data.
             return;
         }
+
         //flag everyone as disconnected first
         SteamUser::query()->update(['is_connected' => false]);
         //cache ttl should be slightly longer than the cronjob, so in theory we won't have to trigger the job on http request.

@@ -10,7 +10,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Sentry\Breadcrumb;
 use SteamCondenser\Community\SteamId;
+use function Sentry\addBreadcrumb;
 
 class GetStaffData implements ShouldQueue
 {
